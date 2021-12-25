@@ -245,7 +245,7 @@ def audio_markup(videoid, user_id, current_time, total_time):
         [
             InlineKeyboardButton(text="🗑 Close Menu", callback_data=f"close")
         ],
-   ]
+    ]
     return buttons
 
 
