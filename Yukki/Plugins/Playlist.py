@@ -158,14 +158,14 @@ options = [
 ]
 
 options_Genre = [
-    "Sinhala Song",
-    "Rap Song",
-    "English Song",
-    "Love Song",
-    "Bollywood Song",
-    "Hollywood Song",
-    "Indian Song",
-    "Others Song",
+    "Sinhala",
+    "Rap",
+    "English",
+    "Love",
+    "Bollywood",
+    "Hollywood",
+    "Indian",
+    "Others",
 ]
 
 
