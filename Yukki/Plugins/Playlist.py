@@ -38,7 +38,7 @@ __HELP__ = """
 @PermissionCheck
 @AssistantAdd
 async def play_playlist_cmd(_, message):
-    thumb = "Utils/Playlist.jpg"
+    thumb = "https://telegra.ph/file/c73e81e111f39c28b35c6.jpg"
     await message.delete()
     if not message.reply_to_message:
         if len(message.command) == 2:
@@ -158,14 +158,14 @@ options = [
 ]
 
 options_Genre = [
-    "Rock",
-    "Sad",
-    "Party",
-    "Lofi",
-    "Bollywood",
-    "Hollywood",
-    "Punjabi",
-    "Others",
+    "Sinhala Song",
+    "Rap Song",
+    "English Song",
+    "Love Song",
+    "Bollywood Song",
+    "Hollywood Song",
+    "Indian Song",
+    "Others Song",
 ]
 
 
