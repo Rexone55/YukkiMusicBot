@@ -99,6 +99,114 @@ async def start_stream(
             0,
         )
 
+        
+        
+async def play_stream(
+    message,
+    file,
+    videoid,
+    thumb,
+    title,
+    duration_min,
+    duration_sec,
+    mystic,
+):
+    global get_queue
+    if await is_active_chat(message.chat.id):
+        position = await Queues.put(message.chat.id, file=file)
+        _path_ = (
+            (str(file))
+            .replace("_", "", 1)
+            .replace("/", "", 1)
+            .replace(".", "", 1)
+        )
+        buttons = secondary_markup(videoid, message.from_user.id)
+        if file not in db_mem:
+            db_mem[file] = {}
+        cpl = f"cache/{_path_}final.png"
+        shutil.copyfile(thumb, cpl)
+        wtfbro = db_mem[file]
+        wtfbro["title"] = title
+        wtfbro["duration"] = duration_min
+        wtfbro["username"] = message.from_user.mention
+        wtfbro["videoid"] = videoid
+        got_queue = get_queue.get(message.message.chat.id)
+        title = title
+        user = message.from_user.first_name
+        duration = duration_min
+        to_append = [title, user, duration]
+        got_queue.append(to_append)
+        final_output = await message.reply_photo(
+            photo=thumb,
+            caption=(
+                f"🎬<b>__Song:__ </b>[{title[:25]}](https://www.youtube.com/watch?v={videoid}) \n⏳<b>__Duration:__</b> {duration_min} \n💡<b>__Info:__</b> [Get Additional Information](https://t.me/{BOT_USERNAME}?start=info_{videoid})\n👤<b>__Requested by:__ </b>{CallbackQuery.from_user.mention} \n🚧<b>__Queued at:__</b> <b>#{position}!</b>"
+            ),
+            reply_markup=InlineKeyboardMarkup(buttons),
+        )
+        await mystic.delete()
+        await message.delete()
+        os.remove(thumb)
+        return
+    else:
+        try:
+            await Yukki.pytgcalls.join_group_call(
+                message.chat.id,
+                InputStream(
+                    InputAudioStream(
+                        file,
+                    ),
+                ),
+                stream_type=StreamType().local_stream,
+            )
+        except Exception as e:
+            return await mystic.edit(
+                "Error Joining Voice Chat. Make sure Voice Chat is Enabled."
+            )
+        get_queue[message.chat.id] = []
+        got_queue = get_queue.get(message.chat.id)
+        title = title
+        user = message.from_user.first_name
+        duration = duration_min
+        to_append = [title, user, duration]
+        got_queue.append(to_append)
+        await music_on(message.chat.id)
+        await add_active_chat(message.chat.id)
+        buttons = primary_markup(
+            videoid, message.from_user.id, duration_min, duration_min
+        )
+        await mystic.delete()
+        cap = f"🎥<b>__Playing:__ </b>[{title[:25]}](https://www.youtube.com/watch?v={videoid}) \n💡<b>__Info:__</b> [Get Additional Information](https://t.me/{BOT_USERNAME}?start=info_{videoid})\n👤**__Requested by:__** {CallbackQuery.from_user.mention}"
+        final_output = await message.reply_photo(
+            photo=thumb,
+            reply_markup=InlineKeyboardMarkup(buttons),
+            caption=cap,
+        )
+        os.remove(thumb)
+        await message.delete()
+        await start_timer(
+            videoid,
+            duration_min,
+            duration_sec,
+            final_output,
+            message.chat.id,
+            message.from_user.id,
+            0,
+        )        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
 
 async def start_stream_audio(
     message, file, videoid, title, duration_min, duration_sec, mystic
