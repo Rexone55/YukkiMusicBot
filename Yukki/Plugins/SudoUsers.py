@@ -185,7 +185,12 @@ async def theme_func(_, message):
         try:
             await app.send_message(
                 x,
-                f"{MUSIC_BOT_NAME} has just restarted herself. Sorry for the issues.\n\nStart playing after 10-15 seconds again.",
+                f"""{MUSIC_BOT_NAME} **Re-Started successfully**.
+**Python:** `3.9.9`
+**Pyrogram:** `1.2.20`
+**PyTgCalls:** `0.8.3`
+**Loaded modules:** `21` 
+Start playing after 10-15 seconds again."""",
             )
             await remove_active_chat(x)
         except Exception:
