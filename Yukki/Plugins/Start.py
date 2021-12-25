@@ -40,54 +40,6 @@ __HELP__ = """
 """
 
 
-@app.on_message(filters.new_chat_members, group=welcome_group)
-async def welcome(_, message: Message):
-    chat_id = message.chat.id
-    if await is_served_chat(chat_id):
-        pass
-    else:
-        await add_served_chat(chat_id)
-    if chat_id in await blacklisted_chats():
-        await message.reply_text(
-            f"Hushh, Your chat group[{message.chat.title}] has been blacklisted!\n\nAsk any Sudo User to whitelist your chat"
-        )
-        await app.leave_chat(chat_id)
-    for member in message.new_chat_members:
-        try:
-            if member.id in OWNER_ID:
-                return await message.reply_text(
-                    f"{MUSIC_BOT_NAME}'s Owner[{member.mention}] has just joined your chat."
-                )
-            if member.id in SUDOERS:
-                return await message.reply_text(
-                    f"A member of {MUSIC_BOT_NAME}'s Sudo User[{member.mention}] has just joined your chat."
-                )
-            if member.id == ASSID:
-                await remove_active_chat(chat_id)
-            if member.id == BOT_ID:
-                out = start_pannel()
-                await message.reply_text(
-                    f"Welcome To {MUSIC_BOT_NAME}\n\nPromote me as administrator in your group otherwise I will not function properly.",
-                    reply_markup=InlineKeyboardMarkup(out[1]),
-                )
-                return
-        except:
-            return
-
-
-@app.on_message(filters.command(["help", "start"]) & filters.group)
-@PermissionCheck
-async def useradd(_, message: Message):
-    out = start_pannel()
-    await asyncio.gather(
-        message.delete(),
-        message.reply_text(
-            f"Thanks for having me in {message.chat.title}.\n{MUSIC_BOT_NAME} is alive.\n\nFor any assistance or help, checkout our support group and channel.",
-            reply_markup=InlineKeyboardMarkup(out[1]),
-        ),
-    )
-
-
 @app.on_message(filters.command("settings") & filters.group)
 @PermissionCheck
 async def settings(_, message: Message):
@@ -104,7 +56,8 @@ async def settings(_, message: Message):
     text, buttons = setting_markup2()
     await asyncio.gather(
         message.delete(),
-        message.reply_text(f"{text}\n\n**Group:** {message.chat.title}\n**Group ID:** {message.chat.id}\n**Volume Level:** {volume}%", reply_markup=InlineKeyboardMarkup(buttons)),
+        message.reply_photo(photo ="https://telegra.ph/file/d4c4350ca90087554d8d3.jpg",
+                           caption = f"{text}\n\n**Group:** {message.chat.title}\n**Group ID:** {message.chat.id}\n**Volume Level:** {volume}%", reply_markup=InlineKeyboardMarkup(buttons)),
     )
 
 
