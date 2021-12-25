@@ -35,6 +35,9 @@ boottime = time.time()
 app = app
 ASS_CLI_1 = ASS_CLI_1
 ASS_CLI_2 = ASS_CLI_2
+ASS_CLI_3 = ASS_CLI_3
+ASS_CLI_4 = ASS_CLI_4
+ASS_CLI_5 = ASS_CLI_5
 aiohttpsession = ClientSession()
 
 ### Config
@@ -59,7 +62,18 @@ ASSID2 = 0
 ASSNAME2 = ""
 ASSUSERNAME2 = ""
 ASSMENTION2 = ""
-
+ASSID3 = 0
+ASSNAME3 = ""
+ASSUSERNAME3 = ""
+ASSMENTION3 = ""
+ASSID4 = 0
+ASSNAME4 = ""
+ASSUSERNAME4 = ""
+ASSMENTION4 = ""
+ASSID5 = 0
+ASSNAME5 = ""
+ASSUSERNAME5 = ""
+ASSMENTION5 = ""
 
 
 async def initiate_bot():
@@ -67,6 +81,9 @@ async def initiate_bot():
     global BOT_ID, BOT_NAME, BOT_USERNAME
     global ASSID1, ASSNAME1, ASSMENTION1, ASSUSERNAME1
     global ASSID2, ASSNAME2, ASSMENTION2, ASSUSERNAME2
+    global ASSID3, ASSNAME3, ASSMENTION3, ASSUSERNAME3
+    global ASSID4, ASSNAME4, ASSMENTION4, ASSUSERNAME4
+    global ASSID5, ASSNAME5, ASSMENTION5, ASSUSERNAME5
     os.system("clear")
     header = Table(show_header=True, header_style="bold yellow")
     header.add_column(
@@ -84,6 +101,12 @@ async def initiate_bot():
         console.print("├ [yellow]Booted Assistant Client 1")
         await ASS_CLI_2.start()
         console.print("├ [yellow]Booted Assistant Client 2")
+        await ASS_CLI_3.start()
+        console.print("├ [yellow]Booted Assistant Client 3")
+        await ASS_CLI_4.start()
+        console.print("├ [yellow]Booted Assistant Client 4")
+        await ASS_CLI_5.start()
+        console.print("├ [yellow]Booted Assistant Client 5")
         await asyncio.sleep(0.5)
         console.print("└ [green]Assistant Clients Booted Successfully!")
         initial = await startup_send_new("Starting Yukki Music Bot...")
@@ -109,9 +132,15 @@ async def initiate_bot():
         getme = await app.get_me()
         getme1 = await ASS_CLI_1.get_me()
         getme2 = await ASS_CLI_2.get_me()
+        getme3 = await ASS_CLI_3.get_me()
+        getme4 = await ASS_CLI_4.get_me()
+        getme5 = await ASS_CLI_5.get_me()
         BOT_ID = getme.id
         ASSID1 = getme1.id
         ASSID2 = getme2.id
+        ASSID3 = getme3.id
+        ASSID4 = getme4.id
+        ASSID5 = getme5.id
         if getme.last_name:
             BOT_NAME = getme.first_name + " " + getme.last_name
         else:
@@ -131,6 +160,27 @@ async def initiate_bot():
         )
         ASSUSERNAME2 = getme2.username
         ASSMENTION2 = getme2.mention
+        ASSNAME3 = (
+            f"{getme3.first_name} {getme3.last_name}"
+            if getme3.last_name
+            else getme3.first_name
+        )
+        ASSUSERNAME3 = getme3.username
+        ASSMENTION3 = getme3.mention
+        ASSNAME4 = (
+            f"{getme4.first_name} {getme4.last_name}"
+            if getme4.last_name
+            else getme4.first_name
+        )
+        ASSUSERNAME4 = getme4.username
+        ASSMENTION4 = getme4.mention
+        ASSNAME5 = (
+            f"{getme5.first_name} {getme5.last_name}"
+            if getme5.last_name
+            else getme5.first_name
+        )
+        ASSUSERNAME5 = getme5.username
+        ASSMENTION5 = getme5.mention
         console.print("└ [green]Refurbished Successfully!")
         await asyncio.sleep(0.9)
         ____ok = await startup_edit_last(___, "Loading Sudo Users...")
@@ -161,6 +211,12 @@ if ASSID1 not in ASSIDS:
     ASSIDS.append(ASSID1)
 if ASSID2 not in ASSIDS:
     ASSIDS.append(ASSID2)
+if ASSID3 not in ASSIDS:
+    ASSIDS.append(ASSID3)
+if ASSID4 not in ASSIDS:
+    ASSIDS.append(ASSID4)
+if ASSID5 not in ASSIDS:
+    ASSIDS.append(ASSID5)
 
 
 def init_db():
