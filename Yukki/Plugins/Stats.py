@@ -58,14 +58,14 @@ async def gstats(_, message):
         pass
     uptime = await bot_sys_stats()
     response = await message.reply_photo(
-        photo="Utils/Query.jpg", caption="Getting Stats!"
+        photo="https://telegra.ph/file/8896cde044d15abadf483.jpg", caption="Getting Stats!"
     )
     end = datetime.now()
     resp = (end - start).microseconds / 1000
     smex = f"""
-[•]<u>**General Stats**</u>
+✘<u>**General Stats**</u>
 
-Ping: `⚡{resp} ms`
+Ping: `{resp} ms`
 {uptime}
     """
     await response.edit_text(smex, reply_markup=stats1)
@@ -90,9 +90,9 @@ async def stats_markup(_, CallbackQuery):
         bot_uptime = int(time.time() - boottime)
         uptime = f"{get_readable_time((bot_uptime))}"
         smex = f"""
-[•]<u>**System Stats**</u>
+✘<u>**System Stats**</u>
 
-**Yukki Uptime:** {uptime}
+**@szrosebot Uptime:** {uptime}
 **System Proc:** Online
 **Platform:** {sc}
 **Architecture:** {arch}
@@ -113,7 +113,7 @@ async def stats_markup(_, CallbackQuery):
         free = hdd.free / (1024.0 ** 3)
         free = str(free)
         smex = f"""
-[•]<u>**Storage Stats**</u>
+✘<u>**Storage Stats**</u>
 
 **Storage Avail:** {total[:4]} GiB
 **Storage Used:** {used[:4]} GiB
@@ -136,7 +136,7 @@ async def stats_markup(_, CallbackQuery):
             except Exception:
                 continue
         smex = f"""
-[•]<u>**Bot Stats**</u>
+✘<u>**Bot Stats**</u>
 
 **Modules Loaded:** {modules_loaded}
 **GBanned Users:** {blocked}
@@ -175,7 +175,7 @@ async def stats_markup(_, CallbackQuery):
         mongouptime = str(mongouptime)
         provider = status["repl"]["tags"]["provider"]
         smex = f"""
-[•]<u>**MongoDB Stats**</u>
+✘<u>**MongoDB Stats**</u>
 
 **Mongo Uptime:** {mongouptime[:4]} Days
 **Version:** {mver}
@@ -260,7 +260,7 @@ async def stats_markup(_, CallbackQuery):
                 privates_ub5 += 1
 
         smex = f"""
-[•]<u>Assistant Stats</u>
+✘<u>Assistant Stats</u>
 
 <u>Assistant One:</u>
 **Dialogs:** {total_ub}
@@ -306,9 +306,9 @@ async def stats_markup(_, CallbackQuery):
         end = datetime.now()
         resp = (end - start).microseconds / 1000
         smex = f"""
-[•]<u>General Stats</u>
+✘<u>General Stats</u>
 
-**Ping:** `⚡{resp} ms`
+**Ping:** `{resp} ms`
 {uptime}"""
         await CallbackQuery.edit_message_text(smex, reply_markup=stats1)
     if command == "wait_stats":
