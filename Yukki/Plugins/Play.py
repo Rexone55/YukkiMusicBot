@@ -198,7 +198,8 @@ async def search_query_more(_, CallbackQuery):
         )
     await CallbackQuery.answer("Searching More Results")
     results = YoutubeSearch(query, max_results=5).to_dict()
-    thumbnail = f"https://i.ytimg.com/vi/{results[0]["id"]}/hqdefault.jpg"
+    data = results["result"][0]
+    thumbnail = f"https://i.ytimg.com/vi/{data[0]["id"]}/hqdefault.jpg"
     med = InputMediaPhoto(
         media= thumbnail,
         caption=(
