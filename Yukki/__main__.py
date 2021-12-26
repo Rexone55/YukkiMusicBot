@@ -202,7 +202,7 @@ I'm Telegram Voice Chat Audio with some useful features.
 All commands can be used with: / """
 
 
-@app.on_message(filters.command("help") & filters.private)
+@app.on_message(filters.command("p") & filters.private)
 async def help_command(_, message):
     text, keyboard = await help_parser(message.from_user.mention)
     await app.send_message(message.chat.id, text, reply_markup=keyboard)
@@ -210,34 +210,6 @@ async def help_command(_, message):
 
 @app.on_message(filters.command("start") & filters.private)
 async def start_command(_, message):
-    if len(message.text.split()) > 1:
-        name = (message.text.split(None, 1)[1]).lower()
-        if name[0] == "s":
-            sudoers = await get_sudoers()
-            text = "**__Sudo Users List of Bot:-__**\n\n"
-            j = 0
-            for count, user_id in enumerate(sudoers, 1):
-                try:
-                    user = await app.get_users(user_id)
-                    user = (
-                        user.first_name if not user.mention else user.mention
-                    )
-                except Exception:
-                    continue
-                text += f"➤ {user}\n"
-                j += 1
-            if j == 0:
-                await message.reply_text("No Sudo Users")
-            else:
-                await message.reply_text(text)
-        if name == "help":
-            text, keyboard = await help_parser(message.from_user.mention)
-            await message.delete()
-            return await app.send_text(
-                message.chat.id,
-                text,
-                reply_markup=keyboard,
-            )
         if name[0] == "i":
             m = await message.reply_text("🔎 Fetching Info!")
             query = (str(name)).replace("info_", "", 1)
@@ -253,26 +225,25 @@ async def start_command(_, message):
                 link = result["link"]
                 published = result["publishedTime"]
             searched_text = f"""
-🔍__**Video Track Information**__
+**Video Track Information**
 
-❇️**Title:** {title}
+**Title:** {title}
+**Duration:** {duration} Mins
+**Views:** `{views}`
+**Published Time:** {published}
+**Channel Name:** {channel}
+**Channel Link:** [Visit From Here]({channellink})
+**Video Link:** [Link]({link})
 
-⏳**Duration:** {duration} Mins
-👀**Views:** `{views}`
-⏰**Published Time:** {published}
-🎥**Channel Name:** {channel}
-📎**Channel Link:** [Visit From Here]({channellink})
-🔗**Video Link:** [Link]({link})
-
-⚡️ __Searched Powered By {BOT_NAME}t__"""
+Searched Powered By {BOT_NAME}"""
             key = InlineKeyboardMarkup(
                 [
                     [
                         InlineKeyboardButton(
-                            text="🎥 Watch Youtube Video", url=f"{link}"
+                            text="Watch Youtube Video", url=f"{link}"
                         ),
                         InlineKeyboardButton(
-                            text="🔄 Close", callback_data="close"
+                            text="updates", url="https://t.me/szteambots"
                         ),
                     ],
                 ]
@@ -314,15 +285,15 @@ async def shikhar(_, CallbackQuery):
     await CallbackQuery.message.edit(text, reply_markup=keyboard)
 
 
-@app.on_callback_query(filters.regex(r"help_(.*?)"))
+@app.on_callback_query(filters.regex(r"elp_(.*?)"))
 async def help_button(client, query):
-    home_match = re.match(r"help_home\((.+?)\)", query.data)
-    mod_match = re.match(r"help_module\((.+?)\)", query.data)
-    prev_match = re.match(r"help_prev\((.+?)\)", query.data)
-    next_match = re.match(r"help_next\((.+?)\)", query.data)
-    back_match = re.match(r"help_back", query.data)
-    create_match = re.match(r"help_create", query.data)
-    top_text = f"""Hello {query.from_user.first_name},
+    ho_match = re.match(r"help_home\((.+?)\)", query.data)
+    m_match = re.match(r"help_module\((.+?)\)", query.data)
+    pv_match = re.match(r"help_prev\((.+?)\)", query.data)
+    net_match = re.match(r"help_next\((.+?)\)", query.data)
+    bak_match = re.match(r"help_back", query.data)
+    crte_match = re.match(r"help_create", query.data)
+    tp_text = f"""Hello {query.from_user.first_name},
 
 Click on the buttons for more information.
 
