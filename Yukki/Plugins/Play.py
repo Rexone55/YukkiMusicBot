@@ -200,10 +200,7 @@ async def search_query_more(_, CallbackQuery):
     results = YoutubeSearch(query, max_results=5).to_dict()
     data = results["result"][0]
     thumbnail = f"https://i.ytimg.com/vi/{data[0]['id']}/hqdefault.jpg"
-    med = InputMediaPhoto(
-        media= thumbnail,
-        caption=(
-            f"1️⃣ <b>[{title1[:25]}...]({url})</b>\n └ 💡 [More information](https://t.me/{BOT_USERNAME}?start=info_{ID1})\n\n2️⃣ <b>[{title2[:25]}...]({url})</b>\n └ 💡 [More information](https://t.me/{BOT_USERNAME}?start=info_{ID2})\n\n3️⃣ <b>[{title3[:25]}...]({url})</b>\n └ 💡 [More information](https://t.me/{BOT_USERNAME}?start=info_{ID3})\n\n4️⃣ <b>[{title4[:25]}...]({url})</b>\n └ 💡 [More information](https://t.me/{BOT_USERNAME}?start=info_{ID4})\n\n5️⃣ <b>[{title5[:25]}...]({url})</b>\n └ 💡 [More information](https://t.me/{BOT_USERNAME}?start=info_{ID5}"
+    med = InputTextMessageContent(f"1️⃣ <b>[{title1[:25]}...]({url})</b>\n └ 💡 [More information](https://t.me/{BOT_USERNAME}?start=info_{ID1})\n\n2️⃣ <b>[{title2[:25]}...]({url})</b>\n └ 💡 [More information](https://t.me/{BOT_USERNAME}?start=info_{ID2})\n\n3️⃣ <b>[{title3[:25]}...]({url})</b>\n └ 💡 [More information](https://t.me/{BOT_USERNAME}?start=info_{ID3})\n\n4️⃣ <b>[{title4[:25]}...]({url})</b>\n └ 💡 [More information](https://t.me/{BOT_USERNAME}?start=info_{ID4})\n\n5️⃣ <b>[{title5[:25]}...]({url})</b>\n └ 💡 [More information](https://t.me/{BOT_USERNAME}?start=info_{ID5}"
         ),
     )
     buttons = search_markup(
