@@ -261,7 +261,6 @@ def audio_timer_markup_start(videoid, user_id, current_time, total_time):
     ]
     return buttons
 
-
 audio_markup2 = InlineKeyboardMarkup(
     [
         [
@@ -269,11 +268,7 @@ audio_markup2 = InlineKeyboardMarkup(
             InlineKeyboardButton(text="⏸️", callback_data=f"pausecb"),
             InlineKeyboardButton(text="⏭️", callback_data=f"skipcb"),
             InlineKeyboardButton(text="⏹️", callback_data=f"stopcb"),
-        [
-            InlineKeyboardButton(text="🙋‍♀️ Rose News", url=f"https://t.me/szroseupdates"),
-            InlineKeyboardButton(text="Menu 👨‍", callback_data=f"other {videoid}|{user_id}")
         ],
-        [
-            InlineKeyboardButton(text="🗑 Close Menu", callback_data=f"close")
-        ],
+        [InlineKeyboardButton("🗑 Close Menu", callback_data="close")],
+    ]
 )
