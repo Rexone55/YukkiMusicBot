@@ -39,7 +39,7 @@ async def play(_, message: Message):
         db_mem[message.chat.id] = {}
     if message.sender_chat:
         return await message.reply_text(
-            "You're an __Anonymous Admin__ in this Chat Group!\nRevert back to User Account From Admin Rights."
+            "💡 You're an __Anonymous Admin__ in this Group!\nRevert back to User Account From Admin Rights."
         )
     audio = (
         (message.reply_to_message.audio or message.reply_to_message.voice)
@@ -49,7 +49,7 @@ async def play(_, message: Message):
     url = get_url(message)
     if audio:
         mystic = await message.reply_text(
-            "🔄 Processing Audio... Please Wait!"
+            "**🔄 processing audio...**"
         )
 
         if audio.file_size > 157286400:
@@ -87,7 +87,7 @@ async def play(_, message: Message):
             mystic,
         )
     elif url:
-        mystic = await message.reply_text("🔄 Processing URL... Please Wait!")
+        mystic = await message.reply_text("**🔄 processing url...**")
         query = message.text.split(None, 1)[1]
         (
             title,
@@ -98,9 +98,10 @@ async def play(_, message: Message):
         ) = get_yt_info_query(query)
         await mystic.delete()
         buttons = url_markup2(videoid, duration_min, message.from_user.id)
+        mention = f"[{message.from_user.first_name}](tg://user?id={message.from_user.id})"
         return await message.reply_photo(
             photo=thumb,
-            caption=f"📎Title: **{title}\n\n⏳Duration:** {duration_min} Mins\n\n__[Get Additional Information About Video](https://t.me/{BOT_USERNAME}?start=info_{videoid})__",
+            caption=f"🏷 **Name:**{title}\n**⏱Duration**: {duration_min} Mins\n🎧 **Request by:**{mention}\n\n[Get  Information](https://t.me/{BOT_USERNAME}?start=info_{videoid})",
             reply_markup=InlineKeyboardMarkup(buttons),
         )
     else:
@@ -109,7 +110,7 @@ async def play(_, message: Message):
                 message.from_user.first_name, message.from_user.id, "abcd"
             )
             await message.reply_photo(
-                photo="Utils/Playlist.jpg",
+                photo="https://telegra.ph/file/5321556a2d8295ba684f8.jpg",
                 caption=(
                     "**Usage:** /play [Music Name or Youtube Link or Reply to Audio]\n\nIf you want to play Playlists! Select the one from Below."
                 ),
@@ -129,9 +130,10 @@ async def play(_, message: Message):
         buttons = url_markup(
             videoid, duration_min, message.from_user.id, query, 0
         )
+        mention = f"[{message.from_user.first_name}](tg://user?id={message.from_user.id})"
         return await message.reply_photo(
             photo=thumb,
-            caption=f"📎Title: **{title}\n\n⏳Duration:** {duration_min} Mins\n\n__[Get Additional Information About Video](https://t.me/{BOT_USERNAME}?start=info_{videoid})__",
+            caption=f"🏷 **Name:**{title}\n**⏱Duration**: {duration_min} Mins\n🎧 **Request by:**{mention}\n\n[Get  Information](https://t.me/{BOT_USERNAME}?start=info_{videoid})",
             reply_markup=InlineKeyboardMarkup(buttons),
         )
 
@@ -159,9 +161,9 @@ async def startyuplay(_, CallbackQuery):
         return await CallbackQuery.message.reply_text(
             f"**Duration Limit Exceeded**\n\n**Allowed Duration: **{DURATION_LIMIT_MIN} minute(s)\n**Received Duration:** {duration_min} minute(s)"
         )
-    await CallbackQuery.answer(f"Processing:- {title[:20]}", show_alert=True)
+    await CallbackQuery.answer(f"💫Processing:- {title[:20]}", show_alert=True)
     mystic = await CallbackQuery.message.reply_text(
-        f"**{MUSIC_BOT_NAME} Downloader**\n\n**Title:** {title[:50]}\n\n0% ▓▓▓▓▓▓▓▓▓▓▓▓ 100%"
+        f"**{MUSIC_BOT_NAME} Downloader📥**\n\n**Title:** {title[:50]}\n\n0% ⚪️⚪️⚪️⚪️⚪️⚪️ 100%"
     )
     downloaded_file = await loop.run_in_executor(
         None, download, videoid, mystic, title
@@ -191,15 +193,16 @@ async def search_query_more(_, CallbackQuery):
     query, user_id = callback_request.split("|")
     if CallbackQuery.from_user.id != int(user_id):
         return await CallbackQuery.answer(
-            "Search Your Own Music. You're not allowed to use this button.",
+            "🥲Search Your Own Music. You're not allowed to use this button.",
             show_alert=True,
         )
     await CallbackQuery.answer("Searching More Results")
     results = YoutubeSearch(query, max_results=5).to_dict()
+    thumbnail = f"https://i.ytimg.com/vi/{results[0]["id"]}/hqdefault.jpg"
     med = InputMediaPhoto(
-        media="Utils/Result.JPEG",
+        media= thumbnail,
         caption=(
-            f"1️⃣<b>{results[0]['title']}</b>\n  ┗  🔗 <u>__[Get Additional Information](https://t.me/{BOT_USERNAME}?start=info_{results[0]['id']})__</u>\n\n2️⃣<b>{results[1]['title']}</b>\n  ┗  🔗 <u>__[Get Additional Information](https://t.me/{BOT_USERNAME}?start=info_{results[1]['id']})__</u>\n\n3️⃣<b>{results[2]['title']}</b>\n  ┗  🔗 <u>__[Get Additional Information](https://t.me/{BOT_USERNAME}?start=info_{results[2]['id']})__</u>\n\n4️⃣<b>{results[3]['title']}</b>\n  ┗  🔗 <u>__[Get Additional Information](https://t.me/{BOT_USERNAME}?start=info_{results[3]['id']})__</u>\n\n5️⃣<b>{results[4]['title']}</b>\n  ┗  🔗 <u>__[Get Additional Information](https://t.me/{BOT_USERNAME}?start=info_{results[4]['id']})__</u>"
+            f"1️⃣ <b>[{title1[:25]}...]({url})</b>\n └ 💡 [More information](https://t.me/{BOT_USERNAME}?start=info_{ID1})\n\n2️⃣ <b>[{title2[:25]}...]({url})</b>\n └ 💡 [More information](https://t.me/{BOT_USERNAME}?start=info_{ID2})\n\n3️⃣ <b>[{title3[:25]}...]({url})</b>\n └ 💡 [More information](https://t.me/{BOT_USERNAME}?start=info_{ID3})\n\n4️⃣ <b>[{title4[:25]}...]({url})</b>\n └ 💡 [More information](https://t.me/{BOT_USERNAME}?start=info_{ID4})\n\n5️⃣ <b>[{title5[:25]}...]({url})</b>\n └ 💡 [More information](https://t.me/{BOT_USERNAME}?start=info_{ID5}"
         ),
     )
     buttons = search_markup(
@@ -248,9 +251,9 @@ async def popat(_, CallbackQuery):
             query,
         )
         await CallbackQuery.edit_message_text(
-            f"6️⃣<b>{results[5]['title']}</b>\n  ┗  🔗 <u>__[Get Additional Information](https://t.me/{BOT_USERNAME}?start=info_{results[5]['id']})__</u>\n\n7️⃣<b>{results[6]['title']}</b>\n  ┗  🔗 <u>__[Get Additional Information](https://t.me/{BOT_USERNAME}?start=info_{results[6]['id']})__</u>\n\n8️⃣<b>{results[7]['title']}</b>\n  ┗  🔗 <u>__[Get Additional Information](https://t.me/{BOT_USERNAME}?start=info_{results[7]['id']})__</u>\n\n9️⃣<b>{results[8]['title']}</b>\n  ┗  🔗 <u>__[Get Additional Information](https://t.me/{BOT_USERNAME}?start=info_{results[8]['id']})__</u>\n\n🔟<b>{results[9]['title']}</b>\n  ┗  🔗 <u>__[Get Additional Information](https://t.me/{BOT_USERNAME}?start=info_{results[9]['id']})__</u>",
+            f"6️⃣ <b>[{title6[:25]}...]({url})</b>\n └ 💡 [More information](https://t.me/{BOT_USERNAME}?start=info_{ID6})\n\n7️⃣ <b>[{title7[:25]}...]({url})</b>\n └ 💡 [More information](https://t.me/{BOT_USERNAME}?start=info_{ID7})\n\n8️⃣ <b>[{title8[:25]}...]({url})</b>\n └ 💡 [More information](https://t.me/{BOT_USERNAME}?start=info_{ID8})\n\n9️⃣ <b>[{title9[:25]}...]({url})</b>\n └ 💡 [More information](https://t.me/{BOT_USERNAME}?start=info_{ID9})\n\n🔟 <b>[{title10[:25]}...]({url})</b>\n └💡 [More information](https://t.me/{BOT_USERNAME}?start=info_{ID10})",    
             reply_markup=InlineKeyboardMarkup(buttons),
-        )
+        ) 
         disable_web_page_preview = True
         return
     if int(i) == 2:
@@ -269,7 +272,7 @@ async def popat(_, CallbackQuery):
             query,
         )
         await CallbackQuery.edit_message_text(
-            f"1️⃣<b>{results[0]['title']}</b>\n  ┗  🔗 <u>__[Get Additional Information](https://t.me/{BOT_USERNAME}?start=info_{results[0]['id']})__</u>\n\n2️⃣<b>{results[1]['title']}</b>\n  ┗  🔗 <u>__[Get Additional Information](https://t.me/{BOT_USERNAME}?start=info_{results[1]['id']})__</u>\n\n3️⃣<b>{results[2]['title']}</b>\n  ┗  🔗 <u>__[Get Additional Information](https://t.me/{BOT_USERNAME}?start=info_{results[2]['id']})__</u>\n\n4️⃣<b>{results[3]['title']}</b>\n  ┗  🔗 <u>__[Get Additional Information](https://t.me/{BOT_USERNAME}?start=info_{results[3]['id']})__</u>\n\n5️⃣<b>{results[4]['title']}</b>\n  ┗  🔗 <u>__[Get Additional Information](https://t.me/{BOT_USERNAME}?start=info_{results[4]['id']})__</u>",
+            f"1️⃣ <b>[{title1[:25]}...]({url})</b>\n └ 💡 [More information](https://t.me/{BOT_USERNAME}?start=info_{ID1})\n\n2️⃣ <b>[{title2[:25]}...]({url})</b>\n └ 💡 [More information](https://t.me/{BOT_USERNAME}?start=info_{ID2})\n\n3️⃣ <b>[{title3[:25]}...]({url})</b>\n └ 💡 [More information](https://t.me/{BOT_USERNAME}?start=info_{ID3})\n\n4️⃣ <b>[{title4[:25]}...]({url})</b>\n └ 💡 [More information](https://t.me/{BOT_USERNAME}?start=info_{ID4})\n\n5️⃣ <b>[{title5[:25]}...]({url})</b>\n └ 💡 [More information](https://t.me/{BOT_USERNAME}?start=info_{ID5})",    
             reply_markup=InlineKeyboardMarkup(buttons),
         )
         disable_web_page_preview = True
@@ -306,8 +309,8 @@ async def slider_query_results(_, CallbackQuery):
         )
         med = InputMediaPhoto(
             media=thumb,
-            caption=f"📎Title: **{title}\n\n⏳Duration:** {duration_min} Mins\n\n__[Get Additional Information About Video](https://t.me/{BOT_USERNAME}?start=info_{videoid})__",
-        )
+            caption=f"🏷 **Name:**{title}\n**⏱Duration**: {duration_min} Mins\n\n[Get  Information](https://t.me/{BOT_USERNAME}?start=info_{videoid})",
+        )     
         return await CallbackQuery.edit_message_media(
             media=med, reply_markup=InlineKeyboardMarkup(buttons)
         )
@@ -329,7 +332,7 @@ async def slider_query_results(_, CallbackQuery):
         )
         med = InputMediaPhoto(
             media=thumb,
-            caption=f"📎Title: **{title}\n\n⏳Duration:** {duration_min} Mins\n\n__[Get Additional Information About Video](https://t.me/{BOT_USERNAME}?start=info_{videoid})__",
+            caption=f"🏷 **Name:**{title}\n**⏱Duration**: {duration_min} Mins\n\n[Get  Information](https://t.me/{BOT_USERNAME}?start=info_{videoid})",
         )
         return await CallbackQuery.edit_message_media(
             media=med, reply_markup=InlineKeyboardMarkup(buttons)
