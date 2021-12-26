@@ -207,9 +207,36 @@ async def help_command(_, message):
     text, keyboard = await help_parser(message.from_user.mention)
     await app.send_message(message.chat.id, text, reply_markup=keyboard)
 
-
 @app.on_message(filters.command("start") & filters.private)
 async def start_command(_, message):
+    if len(message.text.split()) > 1:
+        name = (message.text.split(None, 1)[1]).lower()
+        if name[0] == "s":
+            sudoers = await get_sudoers()
+            text = "**__Sudo Users List of Bot:-__**\n\n"
+            j = 0
+            for count, user_id in enumerate(sudoers, 1):
+                try:
+                    user = await app.get_users(user_id)
+                    user = (
+                        user.first_name if not user.mention else user.mention
+                    )
+                except Exception:
+                    continue
+                text += f"➤ {user}\n"
+                j += 1
+            if j == 0:
+                await message.reply_text("No Sudo Users")
+            else:
+                await message.reply_text(text)
+        if name == "help":
+            text, keyboard = await help_parser(message.from_user.mention)
+            await message.delete()
+            return await app.send_text(
+                message.chat.id,
+                text,
+                reply_markup=keyboard,
+            )
         if name[0] == "i":
             m = await message.reply_text("🔎 Fetching Info!")
             query = (str(name)).replace("info_", "", 1)
@@ -225,25 +252,23 @@ async def start_command(_, message):
                 link = result["link"]
                 published = result["publishedTime"]
             searched_text = f"""
-**Video Track Information**
-
-**Title:** {title}
-**Duration:** {duration} Mins
-**Views:** `{views}`
-**Published Time:** {published}
-**Channel Name:** {channel}
-**Channel Link:** [Visit From Here]({channellink})
-**Video Link:** [Link]({link})
-
-Searched Powered By {BOT_NAME}"""
+🔍__**Video Track Information**__
+❇️**Title:** {title}
+⏳**Duration:** {duration} Mins
+👀**Views:** `{views}`
+⏰**Published Time:** {published}
+🎥**Channel Name:** {channel}
+📎**Channel Link:** [Visit From Here]({channellink})
+🔗**Video Link:** [Link]({link})
+⚡️ __Searched Powered By {BOT_NAME}t__"""
             key = InlineKeyboardMarkup(
                 [
                     [
                         InlineKeyboardButton(
-                            text="Watch Youtube Video", url=f"{link}"
+                            text="🎥 Watch Youtube Video", url=f"{link}"
                         ),
                         InlineKeyboardButton(
-                            text="updates", url="https://t.me/szteambots"
+                            text="🔄 Close", callback_data="close"
                         ),
                     ],
                 ]
@@ -256,16 +281,11 @@ Searched Powered By {BOT_NAME}"""
                 parse_mode="markdown",
                 reply_markup=key,
             )
-    out = private_panel()
-    return await message.reply_text(
-        home_text_pm,
-        reply_markup=InlineKeyboardMarkup(out[1]),
-    )
 
 
 async def help_parser(name, keyboard=None):
     if not keyboard:
-        keyboard = InlineKeyboardMarkup(paginate_modules(0, HELPABLE, "help"))
+        keyboard = InlineKeyboardMarkup(paginate_modules(0, HELPABLE, "hlp"))
     return (
         """Hello {first_name},
 
