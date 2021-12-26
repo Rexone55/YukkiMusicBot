@@ -17,7 +17,7 @@ from Yukki.Inline import (playlist_markup, search_markup, search_markup2,
                           url_markup, url_markup2)
 from Yukki.Utilities.changers import seconds_to_min, time_to_seconds
 from Yukki.Utilities.chat import specialfont_to_normal
-from Yukki.Utilities.stream import start_stream, start_stream_audio, play_stream
+from Yukki.Utilities.stream import start_stream, start_stream_audio
 from Yukki.Utilities.theme import check_theme
 from Yukki.Utilities.thumbnails import gen_thumb
 from Yukki.Utilities.url import get_url
@@ -129,26 +129,38 @@ async def play(_, message: Message):
         buttons = url_markup(
             videoid, duration_min, message.from_user.id, query, 0
         )
-        m = await message.reply_photo(
+        return await message.reply_photo(
             photo=thumb,
             caption=f"📎Title: **{title}\n\n⏳Duration:** {duration_min} Mins\n\n__[Get Additional Information About Video](https://t.me/{BOT_USERNAME}?start=info_{videoid})__",
             reply_markup=InlineKeyboardMarkup(buttons),
         )
 
 
-    chat_id = message.chat.id
-    chat_title = message.chat.title
-    videoid, duration, user_id = videoid, duration_min, message.from_user.id
-        return await m.edit(
-            f"Sorry! Its a Live Video.")
-    await message.delete()
+@app.on_callback_query(filters.regex(pattern=r"Yukki"))
+async def startyuplay(_, CallbackQuery):
+    if CallbackQuery.message.chat.id not in db_mem:
+        db_mem[CallbackQuery.message.chat.id] = {}
+    callback_data = CallbackQuery.data.strip()
+    callback_request = callback_data.split(None, 1)[1]
+    chat_id = CallbackQuery.message.chat.id
+    chat_title = CallbackQuery.message.chat.title
+    videoid, duration, user_id = callback_request.split("|")
+    if str(duration) == "None":
+        return await CallbackQuery.answer(
+            f"Sorry! Its a Live Video.", show_alert=True
+        )
+    if CallbackQuery.from_user.id != int(user_id):
+        return await CallbackQuery.answer(
+            "This is not for you! Search You Own Song.", show_alert=True
+        )
+    await CallbackQuery.message.delete()
     title, duration_min, duration_sec, thumbnail = get_yt_info_id(videoid)
     if duration_sec > DURATION_LIMIT:
-        return await message.reply_text(
+        return await CallbackQuery.message.reply_text(
             f"**Duration Limit Exceeded**\n\n**Allowed Duration: **{DURATION_LIMIT_MIN} minute(s)\n**Received Duration:** {duration_min} minute(s)"
         )
-    await m.edit(f"Processing:- {title[:20]}")
-    mystic = await message.reply_text(
+    await CallbackQuery.answer(f"Processing:- {title[:20]}", show_alert=True)
+    mystic = await CallbackQuery.message.reply_text(
         f"**{MUSIC_BOT_NAME} Downloader**\n\n**Title:** {title[:50]}\n\n0% ▓▓▓▓▓▓▓▓▓▓▓▓ 100%"
     )
     downloaded_file = await loop.run_in_executor(
@@ -160,8 +172,8 @@ async def play(_, message: Message):
     thumb = await gen_thumb(thumbnail, title, user_id, theme, chat_title)
     if chat_id not in db_mem:
         db_mem[chat_id] = {}
-    await play_stream(
-        message,
+    await start_stream(
+        CallbackQuery,
         raw_path,
         videoid,
         thumb,
