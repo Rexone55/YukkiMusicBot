@@ -52,10 +52,6 @@ async def bot_sys_stats():
 @app.on_message(filters.command("stats") & ~filters.edited)
 async def gstats(_, message):
     start = datetime.now()
-    try:
-        await message.delete()
-    except:
-        pass
     uptime = await bot_sys_stats()
     response = await message.reply_photo(
         photo="https://telegra.ph/file/8896cde044d15abadf483.jpg", caption="Getting Stats!"
